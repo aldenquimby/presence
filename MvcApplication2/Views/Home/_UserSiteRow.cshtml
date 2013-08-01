@@ -1,0 +1,9 @@
+﻿@using MvcApplication2.Controllers
+@model MvcApplication2.Models.UserSite
+
+<tr>
+    <td>@Html.Partial("_Link", new LinkModel(Model.Site.BaseUrl, Model.Site.Type.ToString()))</td>
+    <td><a class="editable" href="#" id="username" data-type="text" data-pk="@Model.Site.Id" data-url="@Url.Action("Update")" data-title="Enter username">@Model.Username</a></td>
+    <td><a class="editable" href="#" id="userid" data-type="text" data-pk="@Model.Site.Id" data-url="@Url.Action("Update")" data-title="Enter userid">@Model.UserId</a></td>
+    <td>@Html.Partial("_Link", new LinkModel(Model.SuggestedProfileUrl()))</td>
+</tr>

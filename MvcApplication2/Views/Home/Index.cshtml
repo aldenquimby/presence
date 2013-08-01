@@ -1,0 +1,72 @@
+﻿@using MvcApplication2.Controllers
+@model ViewModel
+
+@section styles
+{
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.4.5/bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+}
+
+@section scripts
+{
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.4.5/bootstrap-editable/js/bootstrap-editable.min.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            $('.editable').editable({
+                send: 'auto',
+            });
+
+            $('#new-save').click(function () {
+
+                var data = {
+                    site: $('#new-site').val(),
+                    username: $('#new-username').val(),
+                    userid: $('#new-userid').val(),
+                    //profileurl: $('#new-profileurl').val(),
+                };
+
+                $.post('@Url.Action("Create")', data, function (resp) {
+                    if (resp.success) {
+                        window.location.href = window.location.href;
+                    } else {
+                        alert('oops!');
+                    }
+                });
+
+                return false;
+            });
+        });
+    </script>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Site</th>
+            <th>Username</th>
+            <th>UserId</th>
+            <th>Suggested</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var userSite in Model.UserSites.OrderBy(x => x.Site.Type.ToString()))
+        {
+            Html.RenderPartial("_UserSiteRow", userSite);
+        }
+        <tr>
+            <td><input type="text" id="new-site"/></td>
+            <td><input type="text" id="new-username"/></td>
+            <td><input type="text" id="new-userid"/></td>
+@*            <td><input type="text" id="new-profileurl"/></td>*@
+            <td><input type="submit" id="new-save"/></td>
+        </tr>
+    </tbody>
+</table>
+
+<div>
+    @foreach (var suggested in Model.SuggestedDomains)
+    {
+        <p>Suggested domain: @Html.Partial("_Link", new LinkModel(suggested))</p>
+    }
+</div>
